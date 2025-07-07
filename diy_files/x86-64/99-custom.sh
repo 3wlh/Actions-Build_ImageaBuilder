@@ -10,7 +10,10 @@ if [ -f "$SETTINGS_FILE" ]; then
    # 读取diy-settings信息
    . "$SETTINGS_FILE"
 fi
-
+#====================添加插件源====================
+sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
+Opkg_url="/etc/opkg/customfeeds.conf"
+sed -i '$a\src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/x86_64/nikki' ${Opkg_url}
 #====================设置LAN口IP====================
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"
