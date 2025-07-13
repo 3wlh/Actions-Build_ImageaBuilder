@@ -1,0 +1,472 @@
+name: Build_ImageBuilder-ophub
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: |
+          选择 OpenWrt 分支
+        required: true
+        default: "immortalwrt"
+        type: choice
+        options:
+          - immortalwrt
+          - openwrt
+          
+      version:
+        description: |
+          选择 OpenWrt 版本
+        required: true
+        default: "24.10-SNAPSHOT"
+        type: choice
+        options:
+          - "24.10-SNAPSHOT"
+          - "24.10.2"
+          - "24.10.1"
+          - "24.10.0"
+          - "23.05.5"
+      
+      openwrt_board:
+        description: |
+          选择 设备 可选值如下：
+        required: false
+        default: "all"
+        type: choice
+        options:
+          - all
+          - top50
+          - rest50
+          - a311d-oes_s905d_s905x3_s922x-ct2000_wxy-oect
+          - a311d
+          - a311d-oes
+          - alark35-3500
+          - anas3035
+          - beikeyun
+          - chainedbox
+          - crrc
+          - dc-a588
+          - dg3399
+          - dg-tn3568
+          - dlfr100
+          - e20c
+          - e25
+          - eaidk-610
+          - emb3531
+          - fine3399
+          - firefly-rk3399
+          - fmx1-pro
+          - jp-tvbox
+          - h28k
+          - h66k
+          - h68k
+          - h69k
+          - h88k
+          - h88k-v3
+          - h96-max-m2
+          - hs530r
+          - hugsun-x99
+          - ipc-r
+          - king3399
+          - kylin3399
+          - lckfb-tspi
+          - leez
+          - lx-r3s
+          - mrkaio-m68s
+          - nanopc-t6
+          - nanopi-r5c
+          - nanopi-r5s
+          - orangepi-5-plus
+          - panther-x2
+          - r66s
+          - r68s
+          - renegade-rk3328
+          - rk3318-box
+          - rock5b
+          - rock5c
+          - ruisen-box
+          - s905
+          - s905-beelink-mini
+          - s905-mxqpro-plus
+          - s905d
+          - s905d-ki-pro
+          - s905d-sml5442tw
+          - s905l
+          - s905l-aurora-1s
+          - s905l-b860av21u
+          - s905l-mg101
+          - s905l2
+          - s905l2-e900v21e
+          - s905l2-wojia
+          - s905l3
+          - s905l3-cm211
+          - s905l3-unt400g1
+          - s905l3-unt402a
+          - s905l3a
+          - s905l3a-cm311
+          - s905l3a-m401a
+          - s905l3b
+          - s905l3b-e900v21d
+          - s905l3b-e900v22d
+          - s905l3b-e900v22e
+          - s905l3b-ip103h
+          - s905l3b-rg020et-ca
+          - s905l3b-unt403a
+          - s905lb-ipbs9505
+          - s905lb-q96-mini
+          - s905lb-r3300l
+          - s905mb
+          - s905w
+          - s905w-w95
+          - s905w-x96-mini
+          - s905w-x96w
+          - s905x
+          - s905x-b860h
+          - s905x-nexbox-a95x
+          - s905x-t95
+          - s905x-tbee
+          - s905x-tx9
+          - s905x2
+          - s905x2-km3
+          - s905x2-x96max-2g
+          - s905x3
+          - s905x3-2101
+          - s905x3-a100
+          - s905x3-a95xf3
+          - s905x3-a95xf3-gb
+          - s905x3-b
+          - s905x3-h96max
+          - s905x3-hk1
+          - s905x3-ip1001m
+          - s905x3-q1
+          - s905x3-q2
+          - s905x3-tx3
+          - s905x3-tx3-bz
+          - s905x3-ugoosx3
+          - s905x3-whale
+          - s905x3-x88-pro-x3
+          - s905x3-x96air
+          - s905x3-x96air-gb
+          - s905x3-x96max
+          - s912
+          - s912-h96pro-plus
+          - s912-m8s-pro
+          - s912-nexbox-a1
+          - s912-nexbox-a2
+          - s912-onecloudpro
+          - s912-phicomm-t1
+          - s912-t95z-plus
+          - s912-tx8-max
+          - s912-tx9-pro-2g
+          - s912-tx9-pro-3g
+          - s912-x92
+          - s912-zyxq-fake
+          - s922x
+          - s922x-ct2000
+          - s922x-gtking
+          - s922x-gtkingpro-h
+          - s922x-odroid-n2
+          - s922x-reva
+          - s922x-ugoos-am6
+          - seewo-sv21
+          - smart-am40
+          - smart-am60
+          - station-m1
+          - station-m2
+          - sv-33a6x
+          - swan1-w28
+          - sw799
+          - tanix-tx6
+          - tb-ls3399
+          - tn3399
+          - tpm312
+          - tqc-a01
+          - tvi3315a
+          - vplus
+          - wxy-oect
+          - wxy-oec-replaced
+          - xiaobao
+          - yskj
+          - zcube1-max
+          - zk-r39a
+          - zysj
+      
+      openwrt_kernel:
+        description: |
+          选择内核版本：
+        required: false
+        default: "5.15.y_6.1.y"
+        type: choice
+        options:
+          - 5.4.y
+          - 5.10.y
+          - 5.15.y
+          - 6.1.y
+          - 6.6.y
+          - 6.12.y
+          - 5.4.y_5.10.y
+          - 5.15.y_6.1.y
+          - 6.1.y_6.12.y
+          - 6.1.y_6.6.y
+          - 6.6.y_6.12.y
+      
+      auto_kernel:
+        description: "自动使用最新内核"
+        required: false
+        default: true
+        type: boolean
+      
+      kernel_repo:
+        description: "设置内核仓库"
+        required: false
+        default: "ophub/kernel"
+        type: choice
+        options:
+          - "ophub/kernel"
+      
+      kernel_usage:
+        description: "设置稳定内核标签"
+        required: false
+        default: "stable"
+        type: choice
+        options:
+          - "stable"
+          - "flippy"
+          - "dev"
+          - "beta"
+      
+      builder_name:
+        description: "设置OpenWrt构建签名"
+        required: false
+        default: "ophub"
+        type: choice
+        options:
+          - "3wlh"
+          - "ophub"
+          - "angel"
+          - "yourname"
+          
+      rootfs_partsize:
+        description: |
+          设置软件包大小 单位(MB)
+        required: true
+        default: '1024'
+        type: choice
+        options:
+          - 512
+          - 1024
+          - 2048
+      
+      network_lan:
+        description: |
+          设置固件IP地址
+        required: true
+        default: '10.10.10.254'
+        type: choice
+        options:
+          - "10.10.10.254"
+          - "192.168.100.1"
+          
+      docker:
+        description: |
+          是否编译 Docker 插件
+        required: true
+        default: false
+        type: boolean
+        
+      enable_pppoe:
+        description: |
+          是否使用PPPoE协议?
+        required: true
+        default: true
+        type: boolean
+        
+      pppoe_account:
+        description: |
+          是否添加 宽带账号? (可留空)
+        required: false
+      pppoe_password:
+        description: |
+          是否添加 宽带密码? (可留空)
+        required: false
+        
+        
+
+env:
+  SSH: false
+  UPLOAD_BIN_DIR: false
+  PATH_CACHE: /tmp/.cache
+  CACHE_IMAGE: imagebuilder:armsr-armv8-${{ inputs.version }}.tar
+
+jobs:
+  Build:
+    name: Build ${{ inputs.branch }}-${{ inputs.version }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Configure docker image
+        run: |
+          if [[ "${{ inputs.version }}" =~ "SNAPSHOT" || "${{ inputs.branch }}" == "openwrt" ]]; then
+            IMAGE=armsr-armv8-${{ inputs.version }}
+          else
+            IMAGE=armsr-armv8-openwrt-${{ inputs.version }}
+          fi
+          if [[ "${{ inputs.branch }}" == "openwrt" ]]; then
+            echo "builder=/builder" >> $GITHUB_ENV
+          else
+            echo "builder=/home/build/immortalwrt" >> $GITHUB_ENV
+          fi
+          echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
+          echo "CACHE_KEY=${{ inputs.branch }}-${IMAGE}-$(echo "${IMAGE}" | md5sum | awk '{print $1}')" >> $GITHUB_ENV
+          
+      - name: Enable Cache
+        uses: actions/cache@main
+        with:
+          path: ${{ env.PATH_CACHE }}
+          key: ${{ env.CACHE_KEY }}
+          
+      - name: Configure environment variables
+        run: |
+          sudo timedatectl set-timezone "Asia/Shanghai"
+          echo "time=$(date "+%Y.%m.%d-%H%M%S")" >> $GITHUB_ENV
+             
+      - name: Create Edit info
+        run: |
+          echo "## 编译时间：\`${{ env.time }}\`" > info.md
+          echo "## [![Github](https://img.shields.io/badge/Release文件可在国内加速站下载-FC7C0D?logo=github&logoColor=fff&labelColor=000&style=for-the-badge)](https://ghproxy.net/)" >> info.md
+          echo "## 固件信息：" >> info.md
+          echo "* 固件版本 \`${{ inputs.version }}\`" >> info.md
+          echo "* 固件地址 \`${{ inputs.network_lan }}\`" >> info.md
+          echo "* 用户名 \`root\` 密码：无" >> info.md
+          echo "* 默认软件包大小 \`${{ inputs.rootfs_partsize }}MB\`" >> info.md
+          if [[ "${{ inputs.docker }}" == "true" ]]; then
+            echo "* 添加\`docker\`版本" >> info.md
+          fi
+          
+      - name: Set executable permissions
+        run: chmod +x ${{ github.workspace }}/diy_make/armv8/make.sh
+      
+      - name: Check Docker images
+        run: |
+          mkdir -p ${{ env.PATH_CACHE }}/image
+          if [[ -f "${{ env.PATH_CACHE }}/image/${{ env.CACHE_IMAGE }}" ]]; then
+            echo -e "\e[1;32mImport Docker image：\e[0m"
+            docker load --input \
+            ${{ env.PATH_CACHE }}/image/${{ env.CACHE_IMAGE }}
+          else
+            docker pull ${{ inputs.branch }}/imagebuilder:${{ env.IMAGE }}
+            echo -e "\e[1;32mExport the image to the cache directory\e[0m"
+            docker save --output \
+            ${{ env.PATH_CACHE }}/image/${{ env.CACHE_IMAGE }} \
+            ${{ inputs.branch }}/imagebuilder:${{ env.IMAGE }}
+          fi
+          chmod -R 777 "${{ env.PATH_CACHE }}"
+          
+      - name: SSH connection to Actions
+        if: env.SSH == 'true'
+        uses: mxschmitt/action-tmate@master
+        
+      - name: Building ${{ inputs.branch }} armsr-armv8
+        id: building
+        run: |
+          docker run --rm -i \
+            --user root \
+            -v "${{ env.PATH_CACHE }}/dl:${{ env.builder }}/dl" \
+            -v "${{ env.PATH_CACHE }}/packages:${{ env.builder }}/packages" \
+            -v "${{ github.workspace }}/armsr-armv8/bin:${{ env.builder }}/bin" \
+            -v "${{ github.workspace }}/diy_make/armv8/make.sh:${{ env.builder }}/make.sh" \
+            -v "${{ github.workspace }}/diy_files/1armv8/generic:${{ env.builder }}/files" \
+            -e PROFILE="generic" \
+            -e BRANCH=${{ inputs.branch }} \
+            -e VERSION=${{ inputs.version }} \
+            -e INCLUDE_DOCKER=${{ inputs.docker }} \
+            -e NETWORK_LAN=${{ inputs.network_lan }} \
+            -e ENABLE_PPPOE=${{ inputs.enable_pppoe }} \
+            -e PPPOE_ACCOUNT=${{ inputs.pppoe_account }} \
+            -e PPPOE_PASSWORD=${{ inputs.pppoe_password }} \
+            -e ROOTFS_PARTSIZE=${{ inputs.rootfs_partsize }} \
+            ${{ inputs.branch }}/imagebuilder:${{ env.IMAGE }} /bin/bash ${{ env.builder }}/make.sh
+          cat "${{ github.workspace }}/armsr-armv8/bin/.bashrc" 2>/dev/null >> $GITHUB_OUTPUT
+          #cat "${{ github.workspace }}/armsr-armv8/bin/.bashrc" 2>/dev/null >> $GITHUB_ENV
+          # exit 1
+      
+      - name: Query Cleanup Cache
+        if: steps.building.outputs.cache == 'delete'
+        run: |
+          # List caches for current repository
+          gh cache list
+          # Delete a cache by key
+          if [[ "$(gh cache list)" =~ "${{ env.CACHE_KEY }}"  ]]; then
+            gh cache delete ${{ env.CACHE_KEY }}
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Reload again Cache
+        if: steps.building.outputs.cache == 'delete'
+        uses: actions/cache@main
+        with:
+          path: ${{ env.PATH_CACHE }}
+          key: ${{ env.CACHE_KEY }}   
+      
+      - name: Upload bin directory
+        uses: actions/upload-artifact@main
+        if: steps.building.outputs.building == 'success' && env.UPLOAD_BIN_DIR == 'true'
+        with:
+          name: GitHub-Actions_armsr-armv8
+          path: ${{ env.PATH_CACHE }}/dl
+      
+      - name: Generate Firmware SHA-256
+        if: ${{ steps.building.outputs.building }} == 'success'
+        id: images
+        run: |
+          mkdir -p ${{ github.workspace }}/output && cd ${{ github.workspace }}/output
+          find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.img.gz" -exec cp {} ${{ github.workspace }}/output \;
+          echo "IMG=$(find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.img.gz")" >> $GITHUB_ENV
+          cp ${{ github.workspace }}/armsr-armv8/bin/*.conf ${{ github.workspace }}/output
+          cp ${{ github.workspace }}/armsr-armv8/bin/*.config ${{ github.workspace }}/output
+          # cp ${{ github.workspace }}/armsr-armv8/bin/targets/rockchip/armv8/*.img.gz ${{ github.workspace }}
+          for file in *.img.gz; do
+            sha256sum "$file" > "$file.sha256"
+            sha256sum -c "$file.sha256"
+          done
+          echo "status=success" >> $GITHUB_OUTPUT
+      
+      - name: Upload ${{ inputs.branch }} as release assets
+        if: ${{ steps.images.outputs.status }} == 'success'
+        uses: ncipollo/release-action@main
+        with:
+          tag: GitHub-Actions_${{ env.time }}
+          artifacts: ${{ github.workspace }}/output/*
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bodyFile: info.md
+          
+          
+      - name: Packaging OpenWrt ophub
+        if: ${{ steps.images.outputs.status }} == 'success'
+        uses: ophub/amlogic-s9xxx-openwrt@main
+        with:
+          openwrt_path: ${{ env.IMG }}
+          openwrt_board: ${{ inputs.openwrt_board }}
+          openwrt_kernel: ${{ inputs.openwrt_kernel }}
+          auto_kernel: ${{ inputs.auto_kernel }}
+          kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_usage: ${{ inputs.kernel_usage }}
+          builder_name: ${{ inputs.builder_name }}
+          
+      - name: Upload the packaged OpenWrt
+        uses: ncipollo/release-action@main
+        if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
+        with:
+          tag: GitHub-Actions_${{ env.time }}
+          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          allowUpdates: true
+          removeArtifacts: false
+          replacesArtifacts: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          bodyFile: info.md
+          
