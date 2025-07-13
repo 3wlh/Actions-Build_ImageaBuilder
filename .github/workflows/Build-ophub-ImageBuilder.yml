@@ -398,7 +398,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/output && cd ${{ github.workspace }}/output
           find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.tar.gz" -exec cp {} ${{ github.workspace }}/output \;
-          echo "IMG=$(find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.tar.gz")" >> $GITHUB_ENV
+          echo "IMG=$(find ${{ github.workspace }}/output/ -type f -name "*.tar.gz")" >> $GITHUB_ENV
           cp ${{ github.workspace }}/armsr-armv8/bin/*.conf ${{ github.workspace }}/output
           cp ${{ github.workspace }}/armsr-armv8/bin/*.config ${{ github.workspace }}/output
           # cp ${{ github.workspace }}/armsr-armv8/bin/targets/rockchip/armv8/*.img.gz ${{ github.workspace }}
