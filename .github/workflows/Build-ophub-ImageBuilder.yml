@@ -293,7 +293,6 @@ jobs:
             echo "builder=/home/build/immortalwrt" >> $GITHUB_ENV
           fi
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
-          echo "CACHE_KEY=${{ inputs.branch }}-${IMAGE}-$(echo "${IMAGE}" | md5sum | awk '{print $1}')" >> $GITHUB_ENV
           
       - name: Enable Cache
         uses: actions/cache@main
@@ -393,7 +392,7 @@ jobs:
           path: ${{ env.PATH_CACHE }}/dl
       
       - name: Generate Firmware SHA-256
-        if: ${{ steps.building.outputs.building }} == 'success'
+        if: steps.building.outputs.building == 'success'
         id: images
         run: |
           mkdir -p ${{ github.workspace }}/output && cd ${{ github.workspace }}/output
@@ -409,7 +408,7 @@ jobs:
           echo "status=success" >> $GITHUB_OUTPUT
       
       - name: Upload ${{ inputs.branch }} as release assets
-        if: ${{ steps.images.outputs.status }} == 'success'
+        if: steps.images.outputs.status == 'success'
         uses: ncipollo/release-action@main
         with:
           tag: GitHub-Actions_${{ env.time }}
@@ -422,7 +421,7 @@ jobs:
           
           
       - name: Packaging OpenWrt ophub
-        if: ${{ steps.images.outputs.status }} == 'success'
+        if: steps.images.outputs.status == 'success'
         uses: ophub/amlogic-s9xxx-openwrt@main
         with:
           openwrt_path: ${{ env.IMG }}
