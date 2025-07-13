@@ -293,6 +293,7 @@ jobs:
             echo "builder=/home/build/immortalwrt" >> $GITHUB_ENV
           fi
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
+          echo "CACHE_KEY=${{ inputs.branch }}-${IMAGE}-$(echo "${IMAGE}" | md5sum | awk '{print $1}')" >> $GITHUB_ENV
           
       - name: Enable Cache
         uses: actions/cache@main
