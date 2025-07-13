@@ -215,14 +215,6 @@ on:
         default: true
         type: boolean
       
-      kernel_repo:
-        description: "设置内核仓库"
-        required: false
-        default: "ophub/kernel"
-        type: choice
-        options:
-          - "ophub/kernel"
-      
       kernel_usage:
         description: "设置稳定内核标签"
         required: false
@@ -272,25 +264,8 @@ on:
         required: true
         default: false
         type: boolean
-        
-      enable_pppoe:
-        description: |
-          是否使用PPPoE协议?
-        required: true
-        default: true
-        type: boolean
-        
-      pppoe_account:
-        description: |
-          是否添加 宽带账号? (可留空)
-        required: false
-      pppoe_password:
-        description: |
-          是否添加 宽带密码? (可留空)
-        required: false
-        
-        
 
+        
 env:
   SSH: false
   UPLOAD_BIN_DIR: false
@@ -454,7 +429,7 @@ jobs:
           openwrt_board: ${{ inputs.openwrt_board }}
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
-          kernel_repo: ${{ inputs.kernel_repo }}
+          kernel_repo: ophub/kernel
           kernel_usage: ${{ inputs.kernel_usage }}
           builder_name: ${{ inputs.builder_name }}
           
