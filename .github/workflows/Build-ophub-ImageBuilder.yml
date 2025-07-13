@@ -397,8 +397,8 @@ jobs:
         id: images
         run: |
           mkdir -p ${{ github.workspace }}/output && cd ${{ github.workspace }}/output
-          find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.img.gz" -exec cp {} ${{ github.workspace }}/output \;
-          echo "IMG=$(find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.img.gz")" >> $GITHUB_ENV
+          find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.gz" -exec cp {} ${{ github.workspace }}/output \;
+          echo "IMG=$(find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.gz")" >> $GITHUB_ENV
           cp ${{ github.workspace }}/armsr-armv8/bin/*.conf ${{ github.workspace }}/output
           cp ${{ github.workspace }}/armsr-armv8/bin/*.config ${{ github.workspace }}/output
           # cp ${{ github.workspace }}/armsr-armv8/bin/targets/rockchip/armv8/*.img.gz ${{ github.workspace }}
