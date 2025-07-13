@@ -160,7 +160,7 @@ if [ $? -ne 0 ]; then
 fi
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 查看文件."
 find "$(pwd)/bin/targets/" -type f
-if [[ -f "$(find "$(pwd)/bin/targets/" -type f -name "*.gz")" ]]; then
+if [[ -f "$(find "$(pwd)/bin/targets/" -type f -name "*.img.gz")" ]]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像完成."
     echo "building=success" >> "$(pwd)/bin/.bashrc"
 else
