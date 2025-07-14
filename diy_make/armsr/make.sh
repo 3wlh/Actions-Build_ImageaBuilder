@@ -107,6 +107,7 @@ PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 
 if $SERVICE; then
+PACKAGES="$PACKAGES luci-i18n-uhttpd-zh-cn luci-i18n-hd-idle-zh-cn"
 PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
 PACKAGES="$PACKAGES luci-app-unishare"
 PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
