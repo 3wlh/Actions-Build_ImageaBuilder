@@ -14,7 +14,7 @@ find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/package
 
 #========== 添加首次启动时运行的脚本 ==========#
 [[ -d "files/etc/uci-defaults" ]] || mkdir -p "files/etc/uci-defaults"
-find "$(pwd)/files/" -maxdepth 1 -type f -name "*" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
+find "$(pwd)/files/" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
 
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
@@ -58,9 +58,7 @@ echo "固件大小: $ROOTFS_PARTSIZE"
 mkdir -p "$(pwd)/files/etc/config"
 cat << EOF > "$(pwd)/files/etc/config/diy-settings"
 settings_lan=${NETWORK_LAN}
-enable_pppoe=${ENABLE_PPPOE}
-pppoe_account=${PPPOE_ACCOUNT}
-pppoe_password=${PPPOE_PASSWORD}
+settings_service=${SERVICE}
 EOF
 echo "========================= 查看自定义配置 ========================="
 cat "$(pwd)/files/etc/config/diy-settings"
@@ -106,17 +104,18 @@ PACKAGES="$PACKAGES luci-i18n-firewall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-argon-config-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
 # PACKAGES="$PACKAGES luci-i18n-cifs-mount-zh-cn"
+PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 
+if $SERVICE; then
+PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
+PACKAGES="$PACKAGES luci-app-unishare"
+PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
+PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
+else
 PACKAGES="$PACKAGES luci-i18n-passwall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-homeproxy-zh-cn"
 # PACKAGES="$PACKAGES luci-app-openclash"
-
-# PACKAGES="$PACKAGES luci-i18n-alist-zh-cn"
-PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
-PACKAGES="$PACKAGES luci-app-unishare"
 PACKAGES="$PACKAGES luci-app-v2ray-server"
-PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
 PACKAGES="$PACKAGES nikki luci-app-nikki luci-i18n-nikki-zh-cn"
 # DDNS解析
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn ddns-scripts_aliyun ddns-scripts-cloudflare ddns-scripts-dnspod bind-host" #knot-host drill bind-host
@@ -128,6 +127,7 @@ PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn ddns-scripts_aliyun ddns-scripts-cloudf
 if $INCLUDE_DOCKER; then
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加docker插件..." 
 PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
+fi
 fi
 
 #=============== 开始打包镜像 ===============#
@@ -157,7 +157,7 @@ if [ $? -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像失败!"
     echo "building=fail" >> "$(pwd)/bin/.bashrc"
 fi
-echo "$(date '+%Y-%m-%d %H:%M:%S') - 查看文件."
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包文件："
 find "$(pwd)/bin/targets/" -type f
 if [[ -f "$(find "$(pwd)/bin/targets/" -type f -name "*.tar.gz")" ]]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像完成."
