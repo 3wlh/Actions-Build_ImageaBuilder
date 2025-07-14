@@ -109,6 +109,7 @@ PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 if $SERVICE; then
 PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-uhttpd-zh-cn luci-i18n-hd-idle-zh-cn"
+PACKAGES="$PACKAGES luci-i18n-cloudflared-zh-cn"
 PACKAGES="$PACKAGES luci-app-store"
 PACKAGES="$PACKAGES luci-i18n-openlist-zh-cn"
 PACKAGES="$PACKAGES luci-app-unishare"
