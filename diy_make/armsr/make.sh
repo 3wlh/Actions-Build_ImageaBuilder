@@ -36,7 +36,7 @@ Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages
 fi
 Openlist "aarch64_generic"
 Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
-"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
+"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
 # Segmentation "https://op.dllkids.xyz/packages/aarch64_generic/" \
 # "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
 
@@ -107,11 +107,12 @@ PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
 
 if $SERVICE; then
-PACKAGES="$PACKAGES luci-i18n-uhttpd-zh-cn luci-i18n-hd-idle-zh-cn"
-PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
-PACKAGES="$PACKAGES luci-app-unishare"
-PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
 PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
+PACKAGES="$PACKAGES luci-i18n-uhttpd-zh-cn luci-i18n-hd-idle-zh-cn"
+PACKAGES="$PACKAGES luci-app-store"
+PACKAGES="$PACKAGES luci-i18n-openlist-zh-cn"
+PACKAGES="$PACKAGES luci-app-unishare"
+PACKAGES="$PACKAGES luci-app-sunpanel"
 else
 PACKAGES="$PACKAGES luci-i18n-passwall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-homeproxy-zh-cn"

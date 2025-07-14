@@ -36,7 +36,7 @@ Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages
 fi
 Openlist "aarch64_generic"
 Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
-"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
+"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
 # Segmentation "https://op.dllkids.xyz/packages/aarch64_generic/" \
 # "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
 
@@ -116,11 +116,10 @@ PACKAGES="$PACKAGES luci-i18n-passwall-zh-cn"
 PACKAGES="$PACKAGES luci-i18n-homeproxy-zh-cn"
 # PACKAGES="$PACKAGES luci-app-openclash"
 
-# PACKAGES="$PACKAGES luci-i18n-alist-zh-cn"
-# PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
+# PACKAGES="$PACKAGES luci-i18n-openlist-zh-cn"
 # PACKAGES="$PACKAGES luci-app-unishare"
 PACKAGES="$PACKAGES luci-app-v2ray-server"
-# PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
+# PACKAGES="$PACKAGES luci-app-sunpanel"
 PACKAGES="$PACKAGES nikki luci-app-nikki luci-i18n-nikki-zh-cn"
 # DDNS解析
 PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn ddns-scripts_aliyun ddns-scripts-cloudflare ddns-scripts-dnspod bind-host" #knot-host drill bind-host
