@@ -229,7 +229,7 @@ on:
       builder_name:
         description: "设置OpenWrt构建签名"
         required: false
-        default: "ophub"
+        default: "3wlh"
         type: choice
         options:
           - "3wlh"
@@ -263,6 +263,12 @@ on:
           是否编译 Docker 插件
         required: true
         default: false
+        type: boolean
+        
+      service:
+        description: "编译成网络服务固件"
+        required: false
+        default: true
         type: boolean
 
         
@@ -350,8 +356,8 @@ jobs:
             -v "${{ env.PATH_CACHE }}/dl:${{ env.builder }}/dl" \
             -v "${{ env.PATH_CACHE }}/packages:${{ env.builder }}/packages" \
             -v "${{ github.workspace }}/armsr-armv8/bin:${{ env.builder }}/bin" \
-            -v "${{ github.workspace }}/diy_make/armv8/make.sh:${{ env.builder }}/make.sh" \
-            -v "${{ github.workspace }}/diy_files/1armv8/generic:${{ env.builder }}/files" \
+            -v "${{ github.workspace }}/diy_make/armsr/make.sh:${{ env.builder }}/make.sh" \
+            -v "${{ github.workspace }}/diy_files/armsr:${{ env.builder }}/files" \
             -e PROFILE="generic" \
             -e BRANCH=${{ inputs.branch }} \
             -e VERSION=${{ inputs.version }} \
@@ -419,8 +425,7 @@ jobs:
           replacesArtifacts: true
           token: ${{ secrets.GITHUB_TOKEN }}
           bodyFile: info.md
-          
-          
+            
       - name: Packaging OpenWrt ophub
         if: steps.images.outputs.status == 'success'
         uses: ophub/amlogic-s9xxx-openwrt@main
