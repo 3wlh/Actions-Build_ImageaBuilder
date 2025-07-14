@@ -257,6 +257,8 @@ on:
         options:
           - "10.10.10.254"
           - "192.168.100.1"
+          - "10.10.10.250"
+          - "10.10.10.5"
           
       docker:
         description: |
@@ -270,8 +272,7 @@ on:
         required: false
         default: true
         type: boolean
-
-        
+      
 env:
   SSH: false
   UPLOAD_BIN_DIR: false
@@ -358,9 +359,9 @@ jobs:
             -v "${{ github.workspace }}/armsr-armv8/bin:${{ env.builder }}/bin" \
             -v "${{ github.workspace }}/diy_make/armsr/make.sh:${{ env.builder }}/make.sh" \
             -v "${{ github.workspace }}/diy_files/armsr:${{ env.builder }}/files" \
-            -e PROFILE="generic" \
             -e BRANCH=${{ inputs.branch }} \
             -e VERSION=${{ inputs.version }} \
+            -e SERVICE=${{ inputs.service }} \
             -e INCLUDE_DOCKER=${{ inputs.docker }} \
             -e NETWORK_LAN=${{ inputs.network_lan }} \
             -e ENABLE_PPPOE=${{ inputs.enable_pppoe }} \
@@ -435,7 +436,7 @@ jobs:
           openwrt_kernel: ${{ inputs.openwrt_kernel }}
           auto_kernel: ${{ inputs.auto_kernel }}
           kernel_repo: ophub/kernel
-          kernel_usage: ${{ inputs.kernel_usage }}
+          kernel_usage: stable
           builder_name: ${{ inputs.builder_name }}
           
       - name: Upload the packaged OpenWrt
