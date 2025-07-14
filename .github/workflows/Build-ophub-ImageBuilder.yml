@@ -215,17 +215,6 @@ on:
         default: true
         type: boolean
       
-      kernel_usage:
-        description: "设置稳定内核标签"
-        required: false
-        default: "stable"
-        type: choice
-        options:
-          - "stable"
-          - "flippy"
-          - "dev"
-          - "beta"
-      
       builder_name:
         description: "设置OpenWrt构建签名"
         required: false
