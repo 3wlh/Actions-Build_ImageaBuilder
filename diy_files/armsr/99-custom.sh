@@ -14,6 +14,7 @@ fi
 sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
 Opkg_url="/etc/opkg/customfeeds.conf"
 sed -i '$a\src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/x86_64/nikki' ${Opkg_url}
+sed -i '$a\src/gz kiddin9 https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9' ${Opkg_url}
 #====================设置LAN口IP====================
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"
