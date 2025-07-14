@@ -26,5 +26,6 @@
 [OpenWrt packages](https://mirrors.sjtug.sjtu.edu.cn/openwrt/releases/24.10-SNAPSHOT/packages/x86_64/packages/) <br><br>
 [OpenWrt kmods](https://mirrors.sjtug.sjtu.edu.cn/openwrt/releases/24.10-SNAPSHOT/targets/x86/64/kmods/)
 # 鸣谢
-### https://github.com/immortalwrt
 ### https://github.com/openwrt
+### https://github.com/immortalwrt
+### https://github.com/ophub/amlogic-s9xxx-openwrt
