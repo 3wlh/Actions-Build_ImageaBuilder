@@ -115,7 +115,7 @@ jobs:
           if [[ "${{ inputs.branch }}" == "openwrt" ]]; then
             echo "builder=/builder" >> $GITHUB_ENV
           else
-            echo "0=/home/build/immortalwrt" >> $GITHUB_ENV
+            echo "builder=/home/build/immortalwrt" >> $GITHUB_ENV
           fi
           echo "IMAGE=${IMAGE}" >> $GITHUB_ENV
           echo "CACHE_KEY=${{ inputs.branch }}-${IMAGE}-$(echo "${IMAGE}" | md5sum | awk '{print $1}')" >> $GITHUB_ENV
@@ -135,7 +135,6 @@ jobs:
           else
             echo "profile=${{ inputs.profile }}" >> $GITHUB_ENV
           fi
-          [[ "${{ inputs.docker }}" == "true" ]] && echo "docker=-Docker" >> $GITHUB_ENV
           [[ "${{ inputs.image }}" =~ "armv8"  ]] && echo "arch=armv8" >> $GITHUB_ENV
           [[ "${{ inputs.image }}" =~ "x86-64"  ]] && echo "arch=x86-64" >> $GITHUB_ENV
           echo "device=$(echo ${{ inputs.image }} | sed 's/-openwrt//' | sed 's/-armv8//')" >> $GITHUB_ENV
