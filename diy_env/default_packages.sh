@@ -8,6 +8,7 @@ PACKAGE="$PACKAGE kmod-nft-offload kmod-nft-nat"
 PACKAGE="$PACKAGE busybox uci luci uhttpd opkg curl openssl-util ds-lite e2fsprogs lsblk resolveip swconfig zram-swap"
 # packages
 PACKAGE="$PACKAGE bash luci-base nano wget-ssl openssh-sftp-server coremark htop"
+PACKAGE="$PACKAGE perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8"
 # luci
 PACKAGE="$PACKAGE luci-lib-ipkg"
 PACKAGES="$PACKAGES luci-i18n-base-zh-cn" 
