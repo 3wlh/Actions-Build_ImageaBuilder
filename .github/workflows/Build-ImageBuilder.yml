@@ -179,10 +179,10 @@ jobs:
         run: |
           docker run --rm -i \
             --user root \
-            -v "${{ github.workspace }}/.github/.sh:${{ env.builder }}/SH" \ 
-            -v "${{ github.workspace }}/diy_env:${{ env.builder }}/DIY_ENV" \ 
             -v "${{ env.PATH_CACHE }}/dl:${{ env.builder }}/dl" \
             -v "${{ env.PATH_CACHE }}/packages:${{ env.builder }}/packages" \
+            -v "${{ github.workspace }}/.github/.sh:${{ env.builder }}/SH" \
+            -v "${{ github.workspace }}/diy_env:${{ env.builder }}/DIY_ENV" \
             -v "${{ github.workspace }}/${{ inputs.image }}/bin:${{ env.builder }}/bin" \
             -v "${{ github.workspace }}/diy_make/${{ env.arch }}/make.sh:${{ env.builder }}/make.sh" \
             -v "${{ github.workspace }}/diy_files/${{ env.arch }}/${{ env.profile }}:${{ env.builder }}/files" \
