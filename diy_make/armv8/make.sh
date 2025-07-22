@@ -3,7 +3,6 @@
 function Script(){
 for file in ${1} ;do
 if [[ -f ${file} ]];then
-    chmod -R 755 "${{ env.PATH_CACHE }}"
 	name=$(basename ${file} .sh)
 	ln -s ${file} /bin/${name}
 	echo "$(date '+%Y-%m-%d %H:%M:%S') - ${name} 创建OK."
