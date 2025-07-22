@@ -21,7 +21,6 @@ on:
         type: choice
         options:
           - x86-64
-          - armsr-armv8
           - rockchip-armv8
           
       version:
@@ -44,8 +43,8 @@ on:
         default: 'friendlyarm_nanopi-r6s'
         type: choice
         options:
-          - friendlyarm_nanopi-r6s
-          - xunlong_orangepi-5-plus
+          - nanopi-r6s
+          - orangepi-5plus
           
       rootfs_partsize:
         description: |
@@ -131,7 +130,7 @@ jobs:
           sudo timedatectl set-timezone "Asia/Shanghai"
           echo "time=$(date "+%Y.%m.%d-%H%M%S")" >> $GITHUB_ENV
           if [[ "${{ inputs.image }}" =~ "x86-64" || "${{ inputs.image }}" =~ "armsr" ]]; then
-            echo "profile=generic" >> $GITHUB_ENV
+            echo "profile=${{ inputs.image }}" >> $GITHUB_ENV
           else
             echo "profile=${{ inputs.profile }}" >> $GITHUB_ENV
           fi
@@ -182,10 +181,12 @@ jobs:
             --user root \
             -v "${{ env.PATH_CACHE }}/dl:${{ env.builder }}/dl" \
             -v "${{ env.PATH_CACHE }}/packages:packages" \
+            -v "${{ github.workspace }}/.github/.sh:${{ env.builder }}/SH" \ 
+            -v "${{ github.workspace }}/diy_env:${{ env.builder }}/diy_env" \ 
             -v "${{ github.workspace }}/${{ inputs.image }}/bin:${{ env.builder }}/bin" \
             -v "${{ github.workspace }}/diy_make/${{ env.arch }}/make.sh:${{ env.builder }}/make.sh" \
             -v "${{ github.workspace }}/diy_files/${{ env.arch }}/${{ env.profile }}:${{ env.builder }}/files" \
-            -e PROFILE=${{ env.profile }} \
+            -e PROFILES=${{ env.profile }} \
             -e BRANCH=${{ inputs.branch }} \
             -e VERSION=${{ inputs.version }} \
             -e INCLUDE_DOCKER=${{ inputs.docker }} \
