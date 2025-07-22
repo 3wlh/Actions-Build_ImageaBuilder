@@ -3,6 +3,7 @@
 function Script(){
 for file in ${1} ;do
 if [[ -f ${file} ]];then
+    chmod -R 755 "${{ env.PATH_CACHE }}"
 	name=$(basename ${file} .sh)
 	ln -s ${file} /bin/${name}
 	echo "$(date '+%Y-%m-%d %H:%M:%S') - ${name} 创建OK."
@@ -10,6 +11,7 @@ fi
 done
 }
 echo "============================= 下载脚本 ============================="
+chmod -R 755 "$(pwd)/SH"
 Script "$(pwd)/SH/*"
 source $(pwd)/DIY_ENV/default_packages.sh
 source $(pwd)/DIY_ENV/${PROFILES}.env

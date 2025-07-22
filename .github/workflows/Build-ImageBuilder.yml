@@ -91,7 +91,6 @@ on:
         required: false
 
 env:
-  SSH: false
   UPLOAD_BIN_DIR: false
   PATH_CACHE: /tmp/.cache
   CACHE_IMAGE: imagebuilder:${{ inputs.image }}-${{ inputs.version }}.tar
@@ -169,10 +168,6 @@ jobs:
             ${{ inputs.branch }}/imagebuilder:${{ env.IMAGE }}
           fi
           chmod -R 777 "${{ env.PATH_CACHE }}"
-          
-      - name: SSH connection to Actions
-        if: env.SSH == 'true'
-        uses: mxschmitt/action-tmate@master
         
       - name: Building ${{ inputs.branch }} ${{ env.device }}
         id: building
