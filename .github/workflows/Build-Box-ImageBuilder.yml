@@ -412,9 +412,10 @@ jobs:
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
+          makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
           bodyFile: info.md
-            
+          
       - name: Packaging OpenWrt ophub
         if: steps.images.outputs.status == 'success'
         uses: ophub/amlogic-s9xxx-openwrt@main
@@ -437,6 +438,6 @@ jobs:
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
+          makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          bodyFile: info.md
-          
+          bodyFile: info.md       
