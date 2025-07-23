@@ -1,5 +1,5 @@
 #!/bin/sh
-# immortalwrt固件首次启动时运行的脚本 /etc/uci-defaults/99-custom.sh
+# 固件首次启动时运行的脚本 /etc/uci-defaults/99-custom.sh
 # 输出日志文件
 LOGFILE="/tmp/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date '+%Y-%m-%d %H:%M:%S')" >> $LOGFILE
@@ -8,7 +8,7 @@ echo "Starting 99-custom.sh at $(date '+%Y-%m-%d %H:%M:%S')" >> $LOGFILE
 SETTINGS_FILE="/etc/config/diy-settings"
 if [ -f "$SETTINGS_FILE" ]; then
    # 读取diy-settings信息
-   . "$SETTINGS_FILE"
+   source "$SETTINGS_FILE"
 fi
 #====================添加插件源====================
 sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
@@ -98,7 +98,9 @@ uci -q delete dhcp.lan.ndp
 uci set dhcp.@dnsmasq[0].filter_aaaa="1"
 uci commit dhcp
 #========System========
-uci set system.@system[0].hostname='Service'
+if [ -n "${settings_model}" ]; then
+uci set system.@system[0].hostname="${settings_model}"
+fi
 uci commit system
 else
 #==========================DHCP==========================
@@ -127,10 +129,9 @@ uci -q delete network.wan6
 uci commit network
 #==========================System==========================
 # 更改名称
-Count=$(cat /tmp/sysinfo/model | grep -o ' ' | wc -l)
-[[ $Count -ge 4 ]] && Model=$(cat /tmp/sysinfo/model | awk '{print $(NF-1), $NF}')
-[[ -z "${Model}" ]] && Model=$(cat /tmp/sysinfo/model | awk '{print $NF}')
-uci set system.@system[0].hostname="${Model}"
+if [ -n "${settings_model}" ]; then
+uci set system.@system[0].hostname="${settings_model}"
+fi
 uci commit system
 fi
 # 设置编译作者信息

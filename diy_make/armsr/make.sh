@@ -1,17 +1,20 @@
 #!/bin/bash
 #====== 函数 ======#
 function Script(){
-Script_NAME=(${2})
-for Script in "${Script_NAME[@]}"; do
-    curl -# -L --fail "${1}/${Script}.sh" -o "/bin/${Script}" && \
-    chmod 755 "/bin/${Script}"
- done
+for file in ${1} ;do
+if [[ -f ${file} ]];then
+	name=$(basename ${file} .sh)
+	ln -s ${file} /bin/${name}
+	echo "$(date '+%Y-%m-%d %H:%M:%S') - ${name} 创建OK."
+fi
+done
 }
 echo "============================= 下载脚本 ============================="
-Script "https://raw.githubusercontent.com/3wlh/Actions-Build_ImmortalWrt/refs/heads/main/.github/.sh" \
-"Download Segmentation Check Replace Kmods Repositories Passwall Openlist"
+chmod -R 755 "$(pwd)/SH"
+Script "$(pwd)/SH/*"
+source $(pwd)/DIY_ENV/default_packages.sh
+source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
-
 #========== 添加首次启动时运行的脚本 ==========#
 [[ -d "files/etc/uci-defaults" ]] || mkdir -p "files/etc/uci-defaults"
 find "$(pwd)/files/" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
@@ -57,8 +60,8 @@ echo "固件大小: $ROOTFS_PARTSIZE"
 #========== 创建自定义配置文件 ==========# 
 mkdir -p "$(pwd)/files/etc/config"
 cat << EOF > "$(pwd)/files/etc/config/diy-settings"
+settings_model=${Model}
 settings_lan=${NETWORK_LAN}
-settings_service=${SERVICE}
 EOF
 echo "========================= 查看自定义配置 ========================="
 cat "$(pwd)/files/etc/config/diy-settings"
@@ -68,26 +71,39 @@ echo "================================================================="
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 开始构建镜像..."
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 系统Version: ${VERSION} ..."
 #========== 定义所需安装的包列表 ==========#
-PACKAGES="\
-    acpid attr base-files bash bc blkid block-mount blockd bsdtar btrfs-progs busybox bzip2 \
-    cgi-io chattr comgt comgt-ncm containerd coremark coreutils coreutils-base64 coreutils-nohup \
-    coreutils-truncate curl docker docker-compose dockerd dosfstools dumpe2fs e2freefrag e2fsprogs \
-    exfat-mkfs f2fs-tools f2fsck fdisk gawk getopt git gzip hostapd-common iconv iw iwinfo jq \
-    jshn kmod-brcmfmac kmod-brcmutil kmod-cfg80211 kmod-mac80211 libjson-script liblucihttp \
-    liblucihttp-lua losetup lsattr lsblk lscpu mkf2fs mount-utils openssl-util parted \
-    perl-http-date perlbase-file perlbase-getopt perlbase-time perlbase-unicode perlbase-utf8 \
-    pigz ppp ppp-mod-pppoe pv rename resize2fs runc tar tini ttyd tune2fs \
-    uclient-fetch uhttpd uhttpd-mod-ubus unzip uqmi usb-modeswitch uuidgen wget-ssl whereis \
-    which wpad-basic wwan xfs-fsck xfs-mkfs xz xz-utils ziptool zoneinfo-asia zoneinfo-core zstd \
-    \
-    luci luci-base luci-compat luci-i18n-base-zh-cn luci-lib-base luci-lib-docker \
-    luci-lib-ip luci-lib-ipkg luci-lib-jsonc luci-lib-nixio luci-mod-admin-full luci-mod-network \
-    luci-mod-status luci-mod-system luci-proto-3g luci-proto-ipip luci-proto-ipv6 \
-    luci-proto-ncm luci-proto-openconnect luci-proto-ppp luci-proto-qmi luci-proto-relay \
-    \
-    luci-app-amlogic luci-i18n-amlogic-zh-cn \
-    \
-    "
+PACKAGES=""
+#========== 删除插件包 ==========#
+PACKAGES="$PACKAGES -luci-app-cpufreq"
+if [[ "${BRANCH}" == "openwrt" ]]; then
+PACKAGES="$PACKAGES -dnsmasq"
+fi
+#========== 添加内核驱动 ==========#
+if [[ "${BRANCH}" == "immortalwrt" ]]; then
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}内核模块..."
+PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
+if [[ "${PROFILE}" == "generic" ]]; then
+PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper kmod-drm-dma-helper"
+else
+PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper kmod-drm-panfrost kmod-drm-rockchip" #kmod-drm-lima:kmod-drm-panfrost kmod-drm-rockchip:kmod-drm-dma-helper
+fi
+PACKAGES="$PACKAGES  kmod-nft-fullcone"
+else
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}内核模块..."
+PACKAGES="$PACKAGES kmod-drm-dma-helper"
+fi
+if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
+PACKAGES="$PACKAGES luci-i18n-package-manager-zh-cn"
+else
+PACKAGES="$PACKAGES luci-i18n-opkg-zh-cn"
+fi
+#========== 添加插件包 ==========#
+PACKAGES="$PACKAGES $PACKAGE"
+PACKAGES="$PACKAGES $DIY_PACKAGES"
+# 添加Docker插件
+if $INCLUDE_DOCKER; then
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加docker插件..." 
+PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
+fi
 #=============== 开始打包镜像 ===============#
 echo "============================= 默认插件 ============================="
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 默认插件包："
@@ -112,7 +128,7 @@ cp -f "$(pwd)/repositories.conf" "$(pwd)/bin/repositories.conf"
 make image PROFILE="generic" PACKAGES="$PACKAGES" FILES="$(pwd)/files" ROOTFS_PARTSIZE=$ROOTFS_PARTSIZE
 echo "============================= 构建结果 ============================="
 if [ $? -ne 0 ]; then
-    echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像失败!"
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像失败!"1
     echo "building=fail" >> "$(pwd)/bin/.bashrc"
 fi
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包文件："

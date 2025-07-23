@@ -9,7 +9,7 @@ if [[ -f ${file} ]];then
 fi
 done
 }
-echo "============================= 下载脚本 ============================="
+echo "============================= 创建脚本 ============================="
 chmod -R 755 "$(pwd)/SH"
 Script "$(pwd)/SH/*"
 source $(pwd)/DIY_ENV/default_packages.sh
