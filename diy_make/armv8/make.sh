@@ -17,7 +17,7 @@ source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
 [[ -d "files/etc/uci-defaults" ]] || mkdir -p "files/etc/uci-defaults"
-find "$(pwd)/files/" -maxdepth 1 -type f -name "*" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
+find "$(pwd)/files/" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
 
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
@@ -60,6 +60,7 @@ echo "固件大小: $ROOTFS_PARTSIZE"
 #========== 创建自定义配置文件 ==========# 
 mkdir -p "$(pwd)/files/etc/config"
 cat << EOF > "$(pwd)/files/etc/config/diy-settings"
+settings_model=${Model}
 settings_lan=${NETWORK_LAN}
 enable_pppoe=${ENABLE_PPPOE}
 pppoe_account=${PPPOE_ACCOUNT}
