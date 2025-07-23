@@ -347,6 +347,7 @@ jobs:
             -v "${{ github.workspace }}/diy_make/armsr/make.sh:${{ env.builder }}/make.sh" \
             -v "${{ github.workspace }}/diy_files/armsr:${{ env.builder }}/files" \
             -e PROFILES=${{ inputs.openwrt_board }} \
+            -e SERVICE=${{ inputs.service }} \
             -e BRANCH=${{ inputs.branch }} \
             -e VERSION=${{ inputs.version }} \
             -e INCLUDE_DOCKER=${{ inputs.docker }} \
@@ -392,10 +393,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/output && cd ${{ github.workspace }}/output
           find ${{ github.workspace }}/armsr-armv8/bin/targets/ -type f -name "*.tar.gz" -exec cp {} ${{ github.workspace }}/output \;
-          echo "IMG=$(find ${{ github.workspace }}/output/ -type f -name "*.tar.gz")" >> $GITHUB_ENV
-          cp ${{ github.workspace }}/armsr-armv8/bin/*.conf ${{ github.workspace }}/output
-          cp ${{ github.workspace }}/armsr-armv8/bin/*.config ${{ github.workspace }}/output
-          # cp ${{ github.workspace }}/armsr-armv8/bin/targets/rockchip/armv8/*.img.gz ${{ github.workspace }}
+          cp ${{ github.workspace }}/armsr-armv8/bin/*.conf* ${{ github.workspace }}/output
           for file in *.tar.gz; do
             sha256sum "$file" > "$file.sha256"
             sha256sum -c "$file.sha256"
