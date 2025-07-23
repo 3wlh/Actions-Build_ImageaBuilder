@@ -1,4 +1,5 @@
 #!/bin/bash
+# 默认添加安装的包列表
 # kmods
 PACKAGE="$PACKAGE kmod-tcp-bbr kmod-lib-zstd kmod-thermal kmod-input-core kmod-gpio-cascade"
 PACKAGE="$PACKAGE kmod-drm kmod-drm-buddy kmod-drm-display-helper kmod-drm-kms-helper kmod-drm-mipi-dbi kmod-drm-ttm"
@@ -13,5 +14,4 @@ PACKAGE="$PACKAGE perl-http-date perlbase-file perlbase-getopt perlbase-time per
 PACKAGE="$PACKAGE luci-lib-ipkg"
 PACKAGE="$PACKAGE luci-i18n-base-zh-cn" 
 PACKAGE="$PACKAGE luci-i18n-firewall-zh-cn"
-PACKAGE="$PACKAGE luci-i18n-ramfree-zh-cn"
 PACKAGE="$PACKAGE luci-i18n-ttyd-zh-cn"

@@ -1,4 +1,4 @@
-name: Build_ImageBuilder-ophub
+name: Build_ImageBuilder-Box
 
 on:
   workflow_dispatch:
@@ -406,8 +406,8 @@ jobs:
         if: steps.images.outputs.status == 'success'
         uses: ncipollo/release-action@main
         with:
-          tag: GitHub-Actions_${{ env.time }}
-          name: ${{ inputs.branch }}_${{ inputs.openwrt_board }}
+          tag: GitHub-Actions_${{ inputs.branch }}-${{ inputs.openwrt_board }}
+          name: ${{ inputs.branch }}_Box-${{ inputs.openwrt_board }}
           artifacts: ${{ github.workspace }}/output/*
           allowUpdates: true
           removeArtifacts: false
@@ -431,8 +431,8 @@ jobs:
         uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success'
         with:
-          tag: GitHub-Actions_${{ env.time }}
-          name: ${{ inputs.branch }}_${{ inputs.openwrt_board }}
+          tag: GitHub-Actions_${{ inputs.branch }}-${{ inputs.openwrt_board }}
+          name: ${{ inputs.branch }}_Box-${{ inputs.openwrt_board }}
           artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
           allowUpdates: true
           removeArtifacts: false
