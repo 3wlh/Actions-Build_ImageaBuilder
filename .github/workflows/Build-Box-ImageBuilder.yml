@@ -444,7 +444,7 @@ jobs:
         with:
           tag: GitHub-Actions_${{ inputs.branch }}-${{ inputs.openwrt_board }}
           name: ${{ inputs.branch }}_Box-${{ inputs.openwrt_board }}
-          artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
+          artifacts: ${{ github.workspace }}/output/*
           allowUpdates: true
           removeArtifacts: false
           replacesArtifacts: true
