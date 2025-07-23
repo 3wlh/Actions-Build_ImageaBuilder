@@ -13,7 +13,7 @@ echo "============================= 下载脚本 ============================="
 chmod -R 755 "$(pwd)/SH"
 Script "$(pwd)/SH/*"
 source $(pwd)/DIY_ENV/default_packages.sh
-source $(pwd)/DIY_ENV/${PROFILES}.env
+source $(pwd)/DIY_ENV/${PROFILES}.env ${SERVICE}
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
 [[ -d "files/etc/uci-defaults" ]] || mkdir -p "files/etc/uci-defaults"
