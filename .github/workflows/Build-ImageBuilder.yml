@@ -242,7 +242,8 @@ jobs:
           name: ${{ inputs.branch }}_${{ env.profile }}
           artifacts: ${{ github.workspace }}/output/*
           allowUpdates: true
-          removeArtifacts: true
+          removeArtifacts: false
           replacesArtifacts: true
+          makeLatest: true
           token: ${{ secrets.GITHUB_TOKEN }}
           bodyFile: info.md
