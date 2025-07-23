@@ -333,10 +333,6 @@ jobs:
             ${{ inputs.branch }}/imagebuilder:${{ env.IMAGE }}
           fi
           chmod -R 777 "${{ env.PATH_CACHE }}"
-          
-      - name: SSH connection to Actions
-        if: env.SSH == 'true'
-        uses: mxschmitt/action-tmate@master
         
       - name: Building ${{ inputs.branch }} armsr-armv8
         id: building
@@ -345,12 +341,14 @@ jobs:
             --user root \
             -v "${{ env.PATH_CACHE }}/dl:${{ env.builder }}/dl" \
             -v "${{ env.PATH_CACHE }}/packages:${{ env.builder }}/packages" \
+            -v "${{ github.workspace }}/.github/.sh:${{ env.builder }}/SH" \
+            -v "${{ github.workspace }}/diy_env:${{ env.builder }}/DIY_ENV" \
             -v "${{ github.workspace }}/armsr-armv8/bin:${{ env.builder }}/bin" \
             -v "${{ github.workspace }}/diy_make/armsr/make.sh:${{ env.builder }}/make.sh" \
             -v "${{ github.workspace }}/diy_files/armsr:${{ env.builder }}/files" \
+            -e PROFILES=${{ inputs.openwrt_board }} \
             -e BRANCH=${{ inputs.branch }} \
             -e VERSION=${{ inputs.version }} \
-            -e SERVICE=${{ inputs.service }} \
             -e INCLUDE_DOCKER=${{ inputs.docker }} \
             -e NETWORK_LAN=${{ inputs.network_lan }} \
             -e ENABLE_PPPOE=${{ inputs.enable_pppoe }} \
