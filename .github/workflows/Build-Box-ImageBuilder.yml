@@ -263,7 +263,6 @@ on:
         type: boolean
       
 env:
-  SSH: false
   UPLOAD_BIN_DIR: false
   PATH_CACHE: /tmp/.cache
   CACHE_IMAGE: imagebuilder:armsr-armv8-${{ inputs.version }}.tar
@@ -425,6 +424,19 @@ jobs:
           kernel_repo: ophub/kernel
           kernel_usage: stable
           builder_name: ${{ inputs.builder_name }}
+          
+      - name: Generate Ophub Firmware SHA-256
+        if: env.PACKAGED_STATUS == 'success'
+        run: |
+          file=$(find ${{ env.PACKAGED_OUTPUTPATH }} -type f -name "*.img.gz")
+          sha256==$(find ${{ env.PACKAGED_OUTPUTPATH }} -type f -name "*.sha")
+          if [[ "${{ inputs.service }}" == "true"  ]]; then
+            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz ${{ github.workspace }}/output/$(basename ${file} .img.gz)-service.img.gz
+            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.sha ${{ github.workspace }}/output/$(basename ${file} .img.gz.sha)-service.img.gz.sha
+          else
+            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz ${{ github.workspace }}/output
+            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.sha ${{ github.workspace }}/output
+          fi
           
       - name: Upload the packaged OpenWrt
         uses: ncipollo/release-action@main
