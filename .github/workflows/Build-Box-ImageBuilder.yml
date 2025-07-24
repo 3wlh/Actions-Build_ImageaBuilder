@@ -429,15 +429,17 @@ jobs:
         if: env.PACKAGED_STATUS == 'success'
         run: |
           cd ${{ env.PACKAGED_OUTPUTPATH }}
-          file=$(find . -type f -name "*.img.gz" -exec basename {} .img.gz \;| sed "s|openwrt||")
-          sha256==$(find . -type f -name "*.sha" -exec basename {} .img.gz.sha \;| sed "s|openwrt||")
+          name=$(find . -type f -name "*.img.gz" -exec basename {} .img.gz \;| sed "s|openwrt||")
           if [[ "${{ inputs.service }}" == "true"  ]]; then
-            cp ./*.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${file}-service.img.gz
-            cp ./*.sha ${{ github.workspace }}/output/${{ inputs.branch }}${file}-service.img.gz.sha
+            cp *.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${name}-service.img.gz
           else
-            cp ./*.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${file}.img.gz
-            cp ./*.sha ${{ github.workspace }}/${{ inputs.branch }}${file}.img.gz.sha
+            cp *.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${name}.img.gz
           fi
+          cd ${{ github.workspace }}/output
+          for file in *.img.gz; do
+            sha256sum "$file" > "$file.sha256"
+            sha256sum -c "$file.sha256"
+          done
           
       - name: Upload the packaged OpenWrt
         uses: ncipollo/release-action@main
