@@ -13,12 +13,13 @@ while IFS= read -r LINE; do
     md5name=$(find "$(pwd)/dl" -type f -name "${name}" 2>/dev/null -exec md5sum -b {} \; | awk '{print $1}')
     echo "插件${name}:{\"md5url\": \"${md5url}\",\"md5name\": \"${md5name}\"}"
     if [[ "${md5url}" == "${md5name}" ]]; then
-        echo "$(date '+%Y-%m-%d %H:%M:%S') - 无更新插件."
+        echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;32m -【${name}】无更新插件.\e[0m"
     else
         # 删除 GitHub 缓存
-        echo "cache=delete" >> "$(pwd)/bin/.bashrc"
         rm -rf "$(pwd)/dl/*"
-        echo -e "$(date '+%Y-%m-%d %H:%M:%S') - 删除所有缓存插件！" 
+        echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;31m -【${name}】有更新插件.\e[0m"
+        echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;31m - 删除所有缓存插件！\e[0m"
+        echo "cache=delete" >> "$(pwd)/bin/.bashrc"
         break
     fi
 done
