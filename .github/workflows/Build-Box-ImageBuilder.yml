@@ -428,14 +428,15 @@ jobs:
       - name: Generate Ophub Firmware SHA-256
         if: env.PACKAGED_STATUS == 'success'
         run: |
-          file=$(find ${{ env.PACKAGED_OUTPUTPATH }} -type f -name "*.img.gz")
-          sha256==$(find ${{ env.PACKAGED_OUTPUTPATH }} -type f -name "*.sha")
+          cd ${{ env.PACKAGED_OUTPUTPATH }}
+          file=$(find . -type f -name "*.img.gz" -exec basename {} .img.gz \;| sed "s|openwrt||")
+          sha256==$(find . -type f -name "*.sha" -exec basename {} .img.gz.sha \;| sed "s|openwrt||")
           if [[ "${{ inputs.service }}" == "true"  ]]; then
-            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz ${{ github.workspace }}/output/$(basename ${file} .img.gz)-service.img.gz
-            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.sha ${{ github.workspace }}/output/$(basename ${file} .img.gz.sha)-service.img.gz.sha
+            cp ./*.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${file}-service.img.gz
+            cp ./*.sha ${{ github.workspace }}/output/${{ inputs.branch }}${file}-service.img.gz.sha
           else
-            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.img.gz ${{ github.workspace }}/output
-            cp ${{ env.PACKAGED_OUTPUTPATH }}/*.sha ${{ github.workspace }}/output
+            cp ./*.img.gz ${{ github.workspace }}/output/${{ inputs.branch }}${file}.img.gz
+            cp ./*.sha ${{ github.workspace }}/${{ inputs.branch }}${file}.img.gz.sha
           fi
           
       - name: Upload the packaged OpenWrt
