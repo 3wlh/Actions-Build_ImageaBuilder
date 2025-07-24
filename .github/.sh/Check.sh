@@ -6,7 +6,7 @@ while IFS= read -r LINE; do
     name=$(echo "${LINE}" | cut -d " " -f 2)
     url=$(echo "${LINE}" | cut -d " " -f 3)
     [[ -z "${name}" || -z "${url}" ]] && continue
-    echo -e "检查${name}更新：" 
+    # echo -e "检查${name}更新：" 
     echo "Downloading ${url}/Packages.gz"
     curl -# --fail "${url}/Packages.gz" -o "/tmp/Packages.gz"
     md5url=$(find "/tmp/" -type f -name "Packages.gz" 2>/dev/null -exec md5sum -b {} \; | awk '{print $1}')
