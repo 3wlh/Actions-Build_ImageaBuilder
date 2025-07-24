@@ -1,15 +1,19 @@
 #!/bin/bash
 #====== 函数 ======#
 function Script(){
-Script_NAME=(${2})
-for Script in "${Script_NAME[@]}"; do
-    curl -# --fail "${1}/${Script}.sh" -o "/bin/${Script}" && \
-    chmod 755 "/bin/${Script}"
- done     
+for file in ${1} ;do
+if [[ -f ${file} ]];then
+	name=$(basename ${file} .sh)
+	ln -s ${file} /bin/${name}
+	echo "$(date '+%Y-%m-%d %H:%M:%S') - ${name} 创建OK."
+fi
+done
 }
-echo "============================= 下载脚本 ============================="
-Script "https://raw.githubusercontent.com/3wlh/Actions-Build_ImmortalWrt/refs/heads/main/.github/.sh" \
-"Download Segmentation Check Replace Kmods Repositories Passwall  Openlist"
+echo "============================= 创建脚本 ============================="
+chmod -R 755 "$(pwd)/SH"
+Script "$(pwd)/SH/*"
+source $(pwd)/DIY_ENV/default_packages.sh
+source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 
 #========== 添加首次启动时运行的脚本 ==========#
@@ -34,7 +38,7 @@ Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages
 Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/x86_64/packages/" \
 "ddns-scripts_aliyun "
 fi
-Openlist "x86_64"
+Openlist2 "x86_64"
 Segmentation "https://dl.openwrt.ai/releases/24.10/packages/x86_64/kiddin9/" \
 "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
 # Segmentation "https://op.dllkids.xyz/packages/x86_64/" \
@@ -75,17 +79,19 @@ if [[ "${BRANCH}" == "openwrt" ]]; then
 PACKAGES="$PACKAGES -dnsmasq"
 fi
 #========== 添加内核驱动 ==========#
-PACKAGES="$PACKAGES kmod-tcp-bbr kmod-lib-zstd kmod-thermal kmod-input-core" # kmod-input-core kmod-thermal
-PACKAGES="$PACKAGES kmod-drm kmod-drm-buddy kmod-drm-display-helper kmod-drm-kms-helper kmod-drm-mipi-dbi kmod-drm-ttm kmod-drm-dma-helper"
-PACKAGES="$PACKAGES kmod-usb-core kmod-usb2 kmod-usb3 kmod-usb-ohci kmod-usb-storage kmod-scsi-generic" # USB驱动
 if [[ "${BRANCH}" == "immortalwrt" ]]; then
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}内核模块..."
-PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper"
-PACKAGES="$PACKAGES kmod-nft-offload kmod-nft-fullcone kmod-nft-nat"
+PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
+if [[ "${PROFILE}" == "generic" ]]; then
+PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper kmod-drm-dma-helper"
+else
+PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper kmod-drm-panfrost kmod-drm-rockchip" #kmod-drm-lima:kmod-drm-panfrost kmod-drm-rockchip:kmod-drm-dma-helper
+fi
+PACKAGES="$PACKAGES  kmod-nft-fullcone"
 else
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}内核模块..."
 PACKAGES="$PACKAGES kmod-drm-dma-helper"
-PACKAGES="$PACKAGES kmod-nft-offload kmod-nft-nat"
+PACKAGES="$PACKAGES luci-lib-ipkg"
 fi
 if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
 PACKAGES="$PACKAGES luci-i18n-package-manager-zh-cn"
@@ -93,42 +99,14 @@ else
 PACKAGES="$PACKAGES luci-i18n-opkg-zh-cn"
 fi
 #========== 添加插件包 ==========#
-PACKAGES="$PACKAGES busybox uci luci uhttpd opkg curl openssl-util ds-lite e2fsprogs lsblk resolveip swconfig zram-swap"
-PACKAGES="$PACKAGES bash luci-base nano wget-ssl openssh-sftp-server coremark htop"
-
-PACKAGES="$PACKAGES kmod-nft-offload kmod-nft-fullcone kmod-nft-nat"
-# 23.05.4 luci-i18n-opkg-zh-cn
-PACKAGES="$PACKAGES luci-i18n-package-manager-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-base-zh-cn" 
-PACKAGES="$PACKAGES luci-i18n-firewall-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-argon-config-zh-cn"
-# PACKAGES="$PACKAGES luci-i18n-cifs-mount-zh-cn"
-
-PACKAGES="$PACKAGES luci-i18n-passwall-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-homeproxy-zh-cn"
-# PACKAGES="$PACKAGES luci-app-openclash"
-
-# PACKAGES="$PACKAGES luci-i18n-alist-zh-cn"
-PACKAGES="$PACKAGES openlist luci-app-openlist luci-i18n-openlist-zh-cn"
-PACKAGES="$PACKAGES luci-i18n-ttyd-zh-cn"
-PACKAGES="$PACKAGES luci-app-unishare"
-PACKAGES="$PACKAGES luci-app-v2ray-server"
-PACKAGES="$PACKAGES sunpanel luci-app-sunpanel"
-PACKAGES="$PACKAGES nikki luci-app-nikki luci-i18n-nikki-zh-cn"
-# DDNS解析
-PACKAGES="$PACKAGES luci-i18n-ddns-zh-cn ddns-scripts_aliyun ddns-scripts-cloudflare ddns-scripts-dnspod knot-host" #bind-host
-# 增加几个必备组件 方便用户安装iStore
-# PACKAGES="$PACKAGES fdisk"
-# PACKAGES="$PACKAGES script-utils"
-# PACKAGES="$PACKAGES luci-i18n-samba4-zh-cn"
+PACKAGES="$PACKAGES $PACKAGE"
+PACKAGES="$PACKAGES $DIY_PACKAGES"
 # 添加Docker插件
 if $INCLUDE_DOCKER; then
-echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加docker插件..."
-PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn" 
+echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加docker插件..." 
+PACKAGES="$PACKAGES docker dockerd docker-compose luci-i18n-dockerman-zh-cn"
 fi
-#========== 删除插件包 ==========#
-PACKAGES="$PACKAGES -luci-app-cpufreq"
+
 #=============== 开始打包镜像 ===============#
 echo "============================= 默认插件 ============================="
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 默认插件包："

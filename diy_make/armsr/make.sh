@@ -9,7 +9,7 @@ if [[ -f ${file} ]];then
 fi
 done
 }
-echo "============================= 下载脚本 ============================="
+echo "============================= 创建脚本 ============================="
 chmod -R 755 "$(pwd)/SH"
 Script "$(pwd)/SH/*"
 source $(pwd)/DIY_ENV/default_packages.sh
@@ -37,7 +37,7 @@ Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages
 Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/packages/" \
 "ddns-scripts_aliyun "
 fi
-Openlist "aarch64_generic"
+Openlist2 "aarch64_generic"
 Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
 "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
 # Segmentation "https://op.dllkids.xyz/packages/aarch64_generic/" \
