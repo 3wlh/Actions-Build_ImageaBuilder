@@ -11,13 +11,24 @@ if [ -f "$SETTINGS_FILE" ]; then
    source "$SETTINGS_FILE"
 fi
 #====================添加插件源====================
-sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
-Opkg_url="/etc/opkg/customfeeds.conf"
-sed -i '$a\src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/aarch64_generic/nikki' ${Opkg_url}
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >/root/mime.pub
+[[ -f /root/mime.pub ]] && mv -f "/root/mime.pub" "/etc/opkg/keys/$(usign -F -p "/root/mime.pub")"
+# sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
+opkg-conf="/etc/opkg/customfeeds.conf"
+sed -i '$a\src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' ${opkg-conf}
 #====================设置LAN口IP====================
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"
 fi
+# 自动获取ipv6
+uci set network.wan.ipv6='auto'
+# 委托 IPv6 前缀
+uci -q delete network.wan.delegate
+uci -q delete network.lan.delegate
+[[ "$(uci -q get network.wan.ip6class)"  =~ "wan_6" ]] || \
+uci add_list network.wan.ip6class='wan_6'
+[[ "$(uci -q get network.lan.ip6class)"  =~ "wan_6" ]] || \
+uci add_list network.lan.ip6class='wan_6'
 uci commit network
 
 #==========================Dropbear==========================
@@ -64,9 +75,9 @@ uci set dhcp.lan.force='1'
 uci -q delete dhcp.@dnsmasq[0].dns_redirect
 # 禁用 ipv6 DHCP
 # DHCPv6 服务
-uci -q delete dhcp.lan.dhcpv6
+# uci -q delete dhcp.lan.dhcpv6
 # RA 服务
-uci -q delete dhcp.lan.ra
+# uci -q delete dhcp.lan.ra
 # NDP 代理
 uci -q delete dhcp.lan.ndp
 # 禁用 ipv6 解析

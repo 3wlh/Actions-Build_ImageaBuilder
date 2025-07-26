@@ -24,22 +24,24 @@ echo "============================= 下载插件 ============================="
 echo "Download_Path: $(pwd)/packages/diy_packages"
 # 禁止检查签名
 sed -i "s/option check_signature/# option check_signature/g" "repositories.conf"
-sed -i '1a src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/aarch64_generic/nikki' "repositories.conf"
-if [[ "${BRANCH}" == "openwrt" ]]; then
-echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}插件"
-if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
-    Passwall "aarch64_generic" "24.10"
-else
-    Passwall "aarch64_generic" "19.07"
-fi
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/luci/" \
-"luci-app-homeproxy luci-i18n-homeproxy-zh-cn luci-app-ramfree luci-i18n-ramfree-zh-cn luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/packages/" \
-"ddns-scripts_aliyun "
-fi
-Openlist2 "aarch64_generic"
-Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
-"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >$(pwd)/mime.pub
+[[ -f /root/mime.pub ]] && mv -f "$(pwd)/mime.pub" "$(pwd)/keys/$(usign -F -p "$(pwd)/mime.pub")"
+sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' "repositories.conf"
+# if [[ "${BRANCH}" == "openwrt" ]]; then
+# echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}插件"
+# if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
+    # Passwall "aarch64_generic" "24.10"
+# else
+    # Passwall "aarch64_generic" "19.07"
+# fi
+#Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/luci/" \
+#"luci-app-homeproxy luci-i18n-homeproxy-zh-cn luci-app-ramfree luci-i18n-ramfree-zh-cn luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
+#Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/packages/" \
+#"ddns-scripts_aliyun "
+#fi
+#Openlist2 "aarch64_generic"
+#Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
+#"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
 # Segmentation "https://op.dllkids.xyz/packages/aarch64_generic/" \
 # "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
 

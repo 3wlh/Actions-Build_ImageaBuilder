@@ -24,8 +24,10 @@ echo "==============================下载插件=============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
 echo "Download_Path: $(pwd)/packages/diy_packages"
 # 禁止检查签名
-sed -i "s/option check_signature/# option check_signature/g" "repositories.conf"
-sed -i '1a src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/x86_64/nikki' "repositories.conf"
+# sed -i "s/option check_signature/# option check_signature/g" "repositories.conf"
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >$(pwd)/mime.pub
+[[ -f /root/mime.pub ]] && mv -f "$(pwd)/mime.pub" "$(pwd)/keys/$(usign -F -p "$(pwd)/mime.pub")"
+sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/x86_64' "repositories.conf"
 if [[ "${BRANCH}" == "openwrt" ]]; then
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}插件"
 if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
