@@ -11,9 +11,9 @@ if [ -f "$SETTINGS_FILE" ]; then
    . "$SETTINGS_FILE"
 fi
 #====================添加插件源====================
-sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
-Opkg_url="/etc/opkg/customfeeds.conf"
-sed -i '$a\src/gz nikki https://nikkinikki.pages.dev/openwrt-24.10/x86_64/nikki' ${Opkg_url}
+# sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
+opkg-conf="/etc/opkg/customfeeds.conf"
+sed -i '$a\src/gz 3wlh https://packages.11121314.xyz/packages/x86_64' ${opkg-conf}
 #====================设置LAN口IP====================
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"

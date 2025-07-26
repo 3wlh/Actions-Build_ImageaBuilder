@@ -16,15 +16,16 @@ source $(pwd)/DIY_ENV/default_packages.sh
 source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
-[[ -d "files/etc/uci-defaults" ]] || mkdir -p "files/etc/uci-defaults"
+[[ -d "$(pwd)/files/etc/uci-defaults" ]] || mkdir -p "$(pwd)/files/etc/uci-defaults"
 find "$(pwd)/files/" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$(pwd)/files/etc/uci-defaults/" \;
+[[ -d "$(pwd)/files/etc/opkg/keys" ]] || mkdir -p "$(pwd)/files/etc/opkg/keys"
 
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
 echo "Download_Path: $(pwd)/packages/diy_packages"
 # 添加签名
 echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >\
-"$(pwd)/keys/29026b52f8ff825c"
+"$(pwd)/keys/29026b52f8ff825c" && cp -f "$(pwd)/keys/29026b52f8ff825c" "$(pwd)/files/etc/opkg/keys/"
 sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' "repositories.conf"
 #Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
 #"luci-app-v2ray-server taskd luci-lib-xterm luci-lib-taskd luci-app-store"
