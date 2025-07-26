@@ -22,28 +22,10 @@ find "$(pwd)/files/" -maxdepth 1 -type f -name "*.sh" -exec mv {} "$(pwd)/files/
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
 echo "Download_Path: $(pwd)/packages/diy_packages"
-# 禁止检查签名
-# sed -i "s/option check_signature/# option check_signature/g" "repositories.conf"
-echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >$(pwd)/mime.pub
-[[ -f /root/mime.pub ]] && mv -f "$(pwd)/mime.pub" "$(pwd)/keys/$(usign -F -p "$(pwd)/mime.pub")"
+# 添加签名
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >\
+"$(pwd)/keys/29026b52f8ff825c"
 sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' "repositories.conf"
-if [[ "${BRANCH}" == "openwrt" ]]; then
-echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}插件"
-if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
-    Passwall "aarch64_generic" "24.10"
-else
-    Passwall "aarch64_generic" "19.07"
-fi
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/luci/" \
-"luci-app-homeproxy luci-i18n-homeproxy-zh-cn luci-app-ramfree luci-i18n-ramfree-zh-cn luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/aarch64_generic/packages/" \
-"ddns-scripts_aliyun "
-fi
-Openlist2 "aarch64_generic"
-Segmentation "https://dl.openwrt.ai/releases/24.10/packages/aarch64_generic/kiddin9/" \
-"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel taskd luci-lib-xterm luci-lib-taskd luci-app-store"
-# Segmentation "https://op.dllkids.xyz/packages/aarch64_generic/" \
-# "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
 
 echo "=========================== 查看下载插件 ==========================="
 ls $(pwd)/packages/diy_packages
@@ -82,7 +64,6 @@ fi
 #========== 添加内核驱动 ==========#
 if [[ "${BRANCH}" == "immortalwrt" ]]; then
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}内核模块..."
-PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
 if [[ "${PROFILE}" == "generic" ]]; then
 PACKAGES="$PACKAGES kmod-drm-gem-shmem-helper kmod-drm-dma-helper"
 else
@@ -98,6 +79,7 @@ PACKAGES="$PACKAGES luci-i18n-package-manager-zh-cn"
 else
 PACKAGES="$PACKAGES luci-i18n-opkg-zh-cn"
 fi
+PACKAGES="$PACKAGES luci-i18n-ramfree-zh-cn"
 #========== 添加插件包 ==========#
 PACKAGES="$PACKAGES $PACKAGE"
 PACKAGES="$PACKAGES $DIY_PACKAGES"

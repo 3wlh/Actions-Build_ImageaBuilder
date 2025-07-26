@@ -11,8 +11,8 @@ if [ -f "$SETTINGS_FILE" ]; then
    source "$SETTINGS_FILE"
 fi
 #====================添加插件源====================
-echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >/root/mime.pub
-[[ -f /root/mime.pub ]] && mv -f "/root/mime.pub" "/etc/opkg/keys/$(usign -F -p "/root/mime.pub")"
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >\
+"/etc/opkg/keys/29026b52f8ff825c"
 # sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
 opkg-conf="/etc/opkg/customfeeds.conf"
 sed -i '$a\src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' ${opkg-conf}

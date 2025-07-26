@@ -23,28 +23,11 @@ find "$(pwd)/files/" -maxdepth 1 -type f -name "*" -exec mv {} "$(pwd)/files/etc
 echo "==============================下载插件=============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
 echo "Download_Path: $(pwd)/packages/diy_packages"
-# 禁止检查签名
-# sed -i "s/option check_signature/# option check_signature/g" "repositories.conf"
-echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >$(pwd)/mime.pub
-[[ -f /root/mime.pub ]] && mv -f "$(pwd)/mime.pub" "$(pwd)/keys/$(usign -F -p "$(pwd)/mime.pub")"
-sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/x86_64' "repositories.conf"
-if [[ "${BRANCH}" == "openwrt" ]]; then
-echo "$(date '+%Y-%m-%d %H:%M:%S') - 添加${BRANCH}插件"
-if [[ "$(echo ${VERSION} |  cut -d '.' -f 1 )" -ge "24" ]]; then
-    Passwall "x86_64" "24.10"
-else
-    Passwall "x86_64" "19.07"
-fi
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/x86_64/luci/" \
-"luci-app-homeproxy luci-i18n-homeproxy-zh-cn luci-app-ramfree luci-i18n-ramfree-zh-cn luci-app-argon-config luci-i18n-argon-config-zh-cn luci-theme-argon"
-Segmentation "https://downloads.immortalwrt.org/releases/24.10-SNAPSHOT/packages/x86_64/packages/" \
-"ddns-scripts_aliyun "
-fi
-Openlist2 "x86_64"
-Segmentation "https://dl.openwrt.ai/releases/24.10/packages/x86_64/kiddin9/" \
-"luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
-# Segmentation "https://op.dllkids.xyz/packages/x86_64/" \
-# "luci-app-unishare unishare webdav2 luci-app-v2ray-server sunpanel luci-app-sunpanel"
+# 添加签名
+echo -e "untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7" >\
+"$(pwd)/keys/29026b52f8ff825c"
+sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' "repositories.conf"
+
 echo "=========================== 查看下载插件 ==========================="
 ls $(pwd)/packages/diy_packages
 
