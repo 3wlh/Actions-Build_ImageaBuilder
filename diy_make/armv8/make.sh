@@ -131,7 +131,7 @@ make image PROFILE=$PROFILE PACKAGES="$PACKAGES" FILES="$(pwd)/files" ROOTFS_PAR
 echo "============================= 构建结果 ============================="
 if [ $? -ne 0 ]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像失败!"
-    echo "building=fail" >> "$(pwd)/bin/.bashrc"
+    echo "building=failure" >> "$(pwd)/bin/.bashrc"
 fi
 echo "$(date '+%Y-%m-%d %H:%M:%S') - 查看文件."
 find "$(pwd)/bin/targets/" -type f
@@ -140,5 +140,5 @@ if [[ -n "$(find "$(pwd)/bin/targets/" -type f -name "*.img.gz")" ]]; then
     echo "building=success" >> "$(pwd)/bin/.bashrc"
 else
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 打包镜像文件失败!"
-    echo "building=fail" >> "$(pwd)/bin/.bashrc"
+    echo "building=failure" >> "$(pwd)/bin/.bashrc"
 fi 
