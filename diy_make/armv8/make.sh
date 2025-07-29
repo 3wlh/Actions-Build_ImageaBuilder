@@ -16,8 +16,8 @@ source $(pwd)/DIY_ENV/default_packages.sh
 source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
-all_diy
 [[ -d "$(pwd)/files/etc/opkg/keys" ]] || mkdir -p "$(pwd)/files/etc/opkg/keys"
+all_diy
 
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
