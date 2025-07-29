@@ -1,2 +1,2 @@
 #!/bin/bash
-sed -i 's|/bin/bash|/bin/ash|' "/etc/passwd"
+sed -i 's|/bin/ash|/bin/bash|' "/etc/passwd"
