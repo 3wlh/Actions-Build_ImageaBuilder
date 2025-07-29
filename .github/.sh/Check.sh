@@ -12,7 +12,7 @@ while IFS= read -r LINE; do
     md5url=$(find "/tmp/" -type f -name "Packages.gz" 2>/dev/null -exec md5sum -b {} \; | awk '{print $1}')
     md5name=$(find "$(pwd)/dl" -type f -name "${name}" 2>/dev/null -exec md5sum -b {} \; | awk '{print $1}')
     echo "插件${name}:{\"md5url\": \"${md5url}\",\"md5name\": \"${md5name}\"}"
-    if [[ "${md5url}1" == "${md5name}" ]]; then
+    if [[ "${md5url}" == "${md5name}" ]]; then
         echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;32m -【${name}】无更新插件.\e[0m\n"
     else
         # 删除 GitHub 缓存
