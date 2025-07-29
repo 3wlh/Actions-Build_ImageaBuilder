@@ -16,7 +16,8 @@ while IFS= read -r LINE; do
         echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;32m -【${name}】无更新插件.\e[0m\n"
     else
         # 删除 GitHub 缓存
-        rm -rf "$(pwd)/dl/*"
+        # rm -rf "$(pwd)/dl/*"
+        find "$(pwd)/dl"  ! -path "$(pwd)/dl" -exec rm -rf {} \;
         echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;31m -【${name}】有更新插件.\e[0m"
         echo -e "$(date '+%Y-%m-%d %H:%M:%S')\e[1;31m - 删除所有缓存插件！\e[0m\n"
         echo "cache=delete" >> "$(pwd)/bin/.bashrc"
