@@ -2,7 +2,6 @@
 # 固件首次启动时运行的脚本 /etc/uci-defaults/99-custom.sh
 # 输出日志文件
 [[ -L "/etc/ophub-release" ]] && rm -f "/etc/profile.d/sys-sysinfo.sh"
-
 LOGFILE="/tmp/uci-defaults-log.txt"
 echo "Starting 99-custom.sh at $(date '+%Y-%m-%d %H:%M:%S')" >> $LOGFILE
 
