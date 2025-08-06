@@ -78,6 +78,7 @@ uci set firewall.docker1.input='ACCEPT'
 uci set firewall.docker.output='ACCEPT'
 uci set firewall.docker.forward='ACCEPT'
 uci commit firewall
+
 #========DHCP========
 # 不提供DHCP服务
 uci delete dhcp.lan.force
@@ -91,8 +92,9 @@ uci -q delete dhcp.lan.ra
 # NDP 代理
 uci -q delete dhcp.lan.ndp
 # 禁用 ipv6 解析
-uci set dhcp.@dnsmasq[0].filter_aaaa="1"
+# uci set dhcp.@dnsmasq[0].filter_aaaa="1"
 uci commit dhcp
+
 #========System========
 if [ -n "${settings_model}" ]; then
 uci set system.@system[0].hostname="${settings_model}"
