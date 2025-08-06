@@ -12,8 +12,8 @@ if [ -f "$SETTINGS_FILE" ]; then
 fi
 #====================添加插件源====================
 # sed -i "s/option check_signature/# option check_signature/g" "/etc/opkg.conf"
-opkg-conf="/etc/opkg/customfeeds.conf"
-sed -i '$a\src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' ${opkg-conf}
+opkg_conf="/etc/opkg/customfeeds.conf"
+sed -i '$a\src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' ${opkg_conf}
 #====================设置LAN口IP====================
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"
