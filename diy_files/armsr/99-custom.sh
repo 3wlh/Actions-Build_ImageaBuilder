@@ -16,6 +16,17 @@ fi
 if [ -n "${settings_lan}" ]; then
 uci set network.lan.ipaddr="${settings_lan}"
 fi
+#========Network========
+# 旁路设置
+# uci set network.lan.proto='static'
+# uci set network.lan.ipaddr="10.10.10.250"
+# 添加 网关 和 DNS
+uci set network.lan.gateway="10.10.10.254"
+uci add_list network.lan.dns="10.10.10.254"
+uci add_list network.lan.dns="8.8.8.8"
+uci add_list network.lan.dns="114.114.114.114"
+# 删除 WAN 口
+uci -q delete network.wan
 uci commit network
 
 #==========================Dropbear==========================
@@ -67,18 +78,6 @@ uci set firewall.docker1.input='ACCEPT'
 uci set firewall.docker.output='ACCEPT'
 uci set firewall.docker.forward='ACCEPT'
 uci commit firewall
-#========Network========
-# 旁路设置
-# uci set network.lan.proto='static'
-# uci set network.lan.ipaddr="10.10.10.250"
-# 添加 网关 和 DNS
-uci set network.lan.gateway="10.10.10.254"
-uci add_list network.lan.dns="10.10.10.254"
-uci add_list network.lan.dns="8.8.8.8"
-uci add_list network.lan.dns="114.114.114.114"
-# 删除 WAN 口
-uci -q delete network.wan
-uci commit network
 #========DHCP========
 # 不提供DHCP服务
 uci delete dhcp.lan.force
