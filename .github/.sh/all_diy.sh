@@ -8,5 +8,5 @@ mv -f "$(pwd)/all/sys-passwd.sh" "$(pwd)/files/etc/uci-defaults"
 mv -f "$(pwd)/all/sys-opkg.sh" "$(pwd)/files/etc/uci-defaults"
 
 [[ -d "$(pwd)/files/etc/profile.d" ]] || mkdir -p "$(pwd)/files/etc/profile.d"
-[[ -f "$(pwd)/all/30-sysinfo.sh" ]] && \
-mv -f "$(pwd)/all/30-sysinfo.sh" "$(pwd)/files/etc/profile.d"
+[[ -f "$(pwd)/all/sys-sysinfo.sh" ]] && \
+mv -f "$(pwd)/all/sys-sysinfo.sh" "$(pwd)/files/etc/profile.d"
