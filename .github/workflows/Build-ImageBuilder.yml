@@ -15,7 +15,7 @@ on:
           
       image:
         description: |
-          选择 OpenWrt 镜像
+          选择 imageBuilder 镜像
         required: true
         default: "rockchip-armv8"
         type: choice

@@ -425,6 +425,7 @@ jobs:
           kernel_repo: ophub/kernel
           kernel_usage: stable
           builder_name: ${{ inputs.builder_name }}
+          openwrt_size: ${{ inputs.rootfs_partsize }}
           
       - name: Generate Ophub Firmware SHA-256
         if: env.PACKAGED_STATUS == 'success'
