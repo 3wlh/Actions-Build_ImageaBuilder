@@ -236,6 +236,15 @@ jobs:
         with:
           path: ${{ env.PATH_CACHE }}
           key: ${{ env.CACHE_KEY }}
+      
+      
+      - name: Delete ${{ inputs.branch }} as release assets
+        if: steps.images.outputs.status == 'success'
+        run: |
+          # 删除本地tag
+          #git tag -d GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
+          # 删除远端tag
+          git push origin --delete GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
           
       - name: Upload ${{ inputs.branch }} as release assets
         if: steps.images.outputs.status == 'success'
