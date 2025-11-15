@@ -236,15 +236,14 @@ jobs:
         with:
           path: ${{ env.PATH_CACHE }}
           key: ${{ env.CACHE_KEY }}
-      
-      
-      - name: Delete ${{ inputs.branch }} as release assets
+          
+      - name: Delete GitHub Release
         if: steps.images.outputs.status == 'success'
-        run: |
-          # 删除本地tag
-          #git tag -d GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
-          # 删除远端tag
-          git push origin --delete GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
+        uses: dev-drprasad/delete-tag-and-release@v1.1
+        with:
+          tag_name: GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
+          delete_release: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}  
           
       - name: Upload ${{ inputs.branch }} as release assets
         if: steps.images.outputs.status == 'success'
