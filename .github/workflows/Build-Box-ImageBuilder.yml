@@ -442,10 +442,18 @@ jobs:
             sha256sum "$file" > "$file.sha256"
             sha256sum -c "$file.sha256"
           done
+      
+      - name: Delete GitHub Release
+        if: env.PACKAGED_STATUS == 'success'
+        uses: dev-drprasad/delete-tag-and-release@v1.1
+        with:
+          tag_name: GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
+          delete_release: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Upload the packaged OpenWrt
-        uses: ncipollo/release-action@main
         if: env.PACKAGED_STATUS == 'success'
+        uses: ncipollo/release-action@main
         with:
           tag: GitHub-Actions_${{ inputs.branch }}-${{ inputs.openwrt_board }}
           name: ${{ inputs.branch }}_Box-${{ inputs.openwrt_board }}
