@@ -243,7 +243,7 @@ on:
         description: |
           设置固件IP地址
         required: true
-        default: '10.10.10.254'
+        default: '10.10.10.250'
         type: choice
         options:
           - "10.10.10.254"
