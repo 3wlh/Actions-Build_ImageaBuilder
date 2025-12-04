@@ -16,9 +16,10 @@ source $(pwd)/DIY_ENV/default_packages.sh
 source $(pwd)/DIY_ENV/${PROFILES}.env
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
+echo "============================= DIY配置 ============================="
 [[ -d "$(pwd)/files/etc/opkg/keys" ]] || mkdir -p "$(pwd)/files/etc/opkg/keys"
-all_diy
-
+DIY_file_all
+Customize_Download
 echo "============================= 下载插件 ============================="
 [[ -d "$(pwd)/packages/diy_packages" ]] || mkdir -p "$(pwd)/packages/diy_packages"
 echo "Download_Path: $(pwd)/packages/diy_packages"
@@ -37,7 +38,7 @@ ls $(pwd)/packages/diy_packages
 echo "============================= 检查缓存 ============================="
 if [[ $(find "$(pwd)/dl" -type f 2>/dev/null | wc -l) -gt 0 ]]; then
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 正在检查缓存插件："
-    Check
+    Plugin_Check
 else
     echo "$(date '+%Y-%m-%d %H:%M:%S') - 没有缓存插件."
 fi
