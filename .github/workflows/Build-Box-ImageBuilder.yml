@@ -449,7 +449,7 @@ jobs:
         if: env.PACKAGED_STATUS == 'success'
         uses: dev-drprasad/delete-tag-and-release@v1.1
         with:
-          tag_name: GitHub-Actions_${{ inputs.image }}-${{ env.profile }}
+          tag_name: GitHub-Actions_${{ inputs.branch }}-${{ inputs.openwrt_board }}
           delete_release: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
           
