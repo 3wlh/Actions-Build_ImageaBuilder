@@ -14,10 +14,10 @@ chmod -R 755 "$(pwd)/SH"
 Script "$(pwd)/SH/*"
 source $(pwd)/DIY_ENV/default_packages.sh
 source $(pwd)/DIY_ENV/${PROFILES}.env
-export Model="${Model}"
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 #========== 添加首次启动时运行的脚本 ==========#
 echo "============================= DIY配置 ============================="
+export Model="${Model}"
 [[ -d "$(pwd)/files/etc/opkg/keys" ]] || mkdir -p "$(pwd)/files/etc/opkg/keys"
 DIY_file_all
 Customize_Download
