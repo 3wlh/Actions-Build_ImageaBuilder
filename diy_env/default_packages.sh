@@ -5,6 +5,7 @@ PACKAGE="$PACKAGE kmod-tcp-bbr kmod-lib-zstd kmod-thermal kmod-input-core kmod-g
 PACKAGE="$PACKAGE kmod-drm kmod-drm-buddy kmod-drm-display-helper kmod-drm-kms-helper kmod-drm-mipi-dbi kmod-drm-ttm"
 PACKAGE="$PACKAGE usb-modeswitch kmod-usb-core kmod-usb2 kmod-usb3 kmod-usb-ohci kmod-usb-storage kmod-scsi-generic" # USB驱动
 PACKAGE="$PACKAGE kmod-nft-offload kmod-nft-nat"
+PACKAGE="$PACKAGE libstdcpp6" # C++支持库文件libstdc++.so.6
 # base
 PACKAGE="$PACKAGE busybox uci luci uhttpd opkg curl openssl-util ds-lite e2fsprogs lsblk resolveip swconfig zram-swap"
 # packages
