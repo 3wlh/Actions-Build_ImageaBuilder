@@ -18,6 +18,7 @@ find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/package
 #========== 添加首次启动时运行的脚本 ==========#
 echo "============================= DIY配置 ============================="
 [[ -d "$(pwd)/files/etc/opkg/keys" ]] || mkdir -p "$(pwd)/files/etc/opkg/keys"
+export Model="${Model}"
 DIY_file_all
 Customize_Download
 echo "============================= 下载插件 ============================="
