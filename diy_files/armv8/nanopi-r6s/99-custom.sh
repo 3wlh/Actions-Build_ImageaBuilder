@@ -146,6 +146,9 @@ uci set system.@system[0].hostname="${settings_model}"
 uci commit system
 fi
 
+uci set runscript.@general[].script_url="http://3wlh.github.io/Script/OpenWrt/Config_sh/R6S.sh"
+uci commit runscript
+
 # 设置编译作者信息
 FILE_PATH="/etc/openwrt_release"
 NEW_DESCRIPTION="Compiled by 3wlh"
