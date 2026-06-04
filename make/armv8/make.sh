@@ -7,8 +7,8 @@ wget -q ${Script_url}/Default_Packages.sh -O "$(pwd)/def_pkg.env" && source "$(p
 find . -maxdepth 1 -type f -name "repositories.conf" -exec cp {} "$(pwd)/packages/" \;
 echo "============================= 初始化自定义插件 ============================="
 # 添加签名和插件源
-key="untrusted comment: public key 29026b52f8ff825c\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7"
-echo -e "${key}" > "$(pwd)/keys/29026b52f8ff825c" 
+key="untrusted comment: Public usign key for 24.10 release builds\nRWQpAmtS+P+CXP4/60amOLDZs7jqKfTrFlKt5+UHYTU0ED9pRmh73vz7"
+echo -e "${key}" > "$(pwd)/keys/29026b52f8ff825c"
 sed -i '1a src/gz 3wlh https://packages.11121314.xyz/packages/aarch64_generic' "repositories.conf"
 [ -d "$(pwd)/packages/diy_packages" ] || mkdir -p "$(pwd)/packages/diy_packages"
 [ -f "$(pwd)/diy_config/diy_pkg.env" ] && source "$(pwd)/diy_config/diy_pkg.env"
